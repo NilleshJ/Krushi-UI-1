@@ -1,68 +1,80 @@
 "use client";
 
-import React from "react";
-import { Button } from "@/components/ui/button"; 
-import { Input } from "@/components/ui/input";   
-import Image from "next/image"; 
-export default function SignUp() {
+import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
+export default function AadharVerification() {
+  const [userDetails, setUserDetails] = useState<any>(null);
+  const searchParams = useSearchParams();
+  const aadharNumber = searchParams.get("aadharNumber");
+  const router = useRouter();
+
+  useEffect(() => {
+    // Mock user details since API isn't set up yet
+    if (aadharNumber) {
+      setTimeout(() => {
+        setUserDetails({
+          name: "John Doe",
+          phone: "9876543210",
+          aadhaarNumber: aadharNumber,
+          address: "123 Main St, City, Country",
+        });
+      }, 1000); // Simulate loading delay
+    }
+  }, [aadharNumber]);
+
+  // Temporary proceed button to move to the next page
   return (
-    <div className="flex flex-col items-center h-screen justify-between px-4">
-      {/* Header Section */}
-      <div className="flex items-center justify-between w-full max-w-xs mt-6">
-        <div className="text-3xl w-32 h-9 font-bold mt-10">Sign Up</div>
-        <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-          {/* Placeholder for User Icon */}
-          <Image
-            src="/profile.png" 
-            alt="User Icon"
-            className="w-full h-full rounded-full"
-          />
-        </div>
+    <div className="flex flex-col min-h-screen px-4 bg-gray-50 pt-6 pb-20 md:px-6 md:pt-8 lg:px-8 lg:pt-10">
+      <div className="flex-grow flex flex-col items-center justify-center mb-8">
+        <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+          User Details
+        </h2>
+
+        {/* Show loading screen while fetching data */}
+        {!userDetails ? (
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-lg font-medium text-gray-600">Loading...</p>
+            <button
+              onClick={() =>
+                setUserDetails({
+                  name: "Test User",
+                  phone: "1234567890",
+                  aadhaarNumber: "1234-5678-9012",
+                  address: "Sample Address",
+                })
+              }
+              className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+            >
+              Load Dummy Data
+            </button>
+          </div>
+        ) : (
+          // Once data is fetched or mocked, display it
+          <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-6 mb-6">
+            <p className="text-lg text-gray-700 mb-2">
+              <strong>Name:</strong> {userDetails.name}
+            </p>
+            <p className="text-lg text-gray-700 mb-2">
+              <strong>Phone:</strong> {userDetails.phone}
+            </p>
+            <p className="text-lg text-gray-700 mb-2">
+              <strong>Aadhaar Number:</strong> {userDetails.aadhaarNumber}
+            </p>
+            <p className="text-lg text-gray-700 mb-2">
+              <strong>Address:</strong> {userDetails.address}
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Description Section */}
-      <div className="text-center w-96 h-16 mt-40 text-gray-600 px-4 ">
-      To create a new store, complete the customer's business verification by validating their GST number
-      </div>
-
-      {/* Form Section */}
-      <form className="flex flex-col items-center gap-4 mt-16 w-full max-w-xs">
-        {/* Aadhaar Number Input */}
-        <Input
-          type="text"
-          placeholder="GST Number"
-          className="w-full"
-        />
-        {/* Proceed Button */}
-        <Button
-          type="submit"
-          className="w-full bg-blue-500 text-white hover:bg-blue-600"
+      <div className="w-full max-w-md flex justify-center mt-auto mb-24">
+        <button
+          onClick={() => router.push(`/gstno`)} // Navigate to the next page
+          className="w-full bg-blue-600 text-white text-lg font-semibold py-4 rounded-xl shadow-lg hover:bg-blue-700 transition"
         >
           Proceed
-        </Button>
-      </form>
-
-      {/* Footer Navigation */}
-      <div className="flex justify-between w-full max-w-xs mt-auto mb-4">
-        {/* Monitor Icon */}
-        <div className="flex flex-col items-center">
-          <img
-            src="/monitor1.png" // Replace with your monitor icon
-            alt="Monitor Icon"
-            className="w-6 h-6"
-          />
-          <div className="text-sm text-gray-500">Monitor</div>
-        </div>
-
-        {/* Sign Up Icon */}
-        <div className="flex flex-col items-center">
-          <img
-            src="/signupp.png" // Replace with your signup icon
-            alt="Sign Up Icon"
-            className="w-6 h-6"
-          />
-          <div className="text-sm text-blue-500">SignUp</div>
-        </div>
+        </button>
       </div>
     </div>
   );

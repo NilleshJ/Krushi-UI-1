@@ -1,69 +1,65 @@
 "use client";
 
-import React from "react";
-import { Button } from "@/components/ui/button"; 
-import { Input } from "@/components/ui/input";   
-import Image from "next/image"; 
-export default function SignUp() {
-  return (
-    <div className="flex flex-col items-center h-screen justify-between px-4">
-      {/* Header Section */}
-      <div className="flex items-center justify-between w-full max-w-xs mt-6">
-        <div className="text-3xl w-32 h-9 font-bold mt-10">Sign Up</div>
-        <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-          {/* Placeholder for User Icon */}
-          <Image
-            src="/profile.png" 
-            alt="User Icon"
-            className="w-full h-full rounded-full"
-          />
-        </div>
-      </div>
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
+export default function SignUp() {
+  const [gstNumber, setGstNumber] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  // GST Validation Regex
+  const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!gstRegex.test(gstNumber)) {
+      setError("Please enter a valid GST number");
+    } else {
+      setError("");
+      // Navigate to the next page
+      router.push("/gstverification"); // Replace with your actual route
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen px-6">
       {/* Description Section */}
-      <div className="text-center w-96 h-16 mt-40 text-gray-600 px-4 ">
-      To create a new store, complete the customer's business verification by validating their GST number
+      <div className="text-center w-full max-w-md text-gray-600 px-4 mb-6">
+        <p>
+          To create a new store, complete the customer's business verification
+          by validating their GST number.
+        </p>
       </div>
 
       {/* Form Section */}
-      <form className="flex flex-col items-center gap-4 mt-16 w-full max-w-xs">
-        {/* Aadhaar Number Input */}
+      <form
+        className="flex flex-col items-center w-full max-w-md"
+        onSubmit={handleSubmit}
+      >
+        {/* GST Number Input */}
         <Input
           type="text"
           placeholder="GST Number"
-          className="w-full"
+          value={gstNumber}
+          onChange={(e) => setGstNumber(e.target.value)}
+          className={`w-full px-4 py-3 text-lg mt-4 ${
+            error ? "border-red-500" : ""
+          }`}
         />
+        {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+        
         {/* Proceed Button */}
         <Button
           type="submit"
-          className="w-full bg-blue-500 text-white hover:bg-blue-600"
+          className="w-full bg-blue-500 text-white hover:bg-blue-600 py-3 text-lg mt-4"
         >
           Proceed
         </Button>
       </form>
-
-      {/* Footer Navigation */}
-      <div className="flex justify-between w-full max-w-xs mt-auto mb-4">
-        {/* Monitor Icon */}
-        <div className="flex flex-col items-center">
-          <img
-            src="/monitor1.png" // Replace with your monitor icon
-            alt="Monitor Icon"
-            className="w-6 h-6"
-          />
-          <div className="text-sm text-gray-500">Monitor</div>
-        </div>
-
-        {/* Sign Up Icon */}
-        <div className="flex flex-col items-center">
-          <img
-            src="/signupp.png" // Replace with your signup icon
-            alt="Sign Up Icon"
-            className="w-6 h-6"
-          />
-          <div className="text-sm text-blue-500">SignUp</div>
-        </div>
-      </div>
     </div>
   );
 }

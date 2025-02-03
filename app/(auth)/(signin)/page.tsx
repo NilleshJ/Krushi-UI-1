@@ -3,23 +3,23 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Image from 'next/image';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage
-} from '@/components/ui/form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  aadharNumber: z.string().min(10, { message: 'Aadhar must be at least 10 characters long' })
+  aadharNumber: z
+    .string()
+    .length(12, { message: "Aadhaar number must be exactly 12 digits" })
+    .regex(/^\d+$/, { message: "Only numbers are allowed" }) // Ensures only numbers
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
@@ -27,36 +27,21 @@ type UserFormValue = z.infer<typeof formSchema>;
 export default function SignUp() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [isToast, setToast] = useState(false);
-  const [message, setMessage] = useState('');
-  const [show, setShow] = useState(false);
-  const [type, setType] = useState<any>(null);
-  const defaultValues = {
-    aadharNumber: '',
-  };
+  const defaultValues = { aadharNumber: "" };
+
   const form = useForm<UserFormValue>({
     resolver: zodResolver(formSchema),
     defaultValues
   });
 
   const onSubmit = async (data: UserFormValue) => {
-    setLoading(true)
-    const obj = {
-      aadharNumber: data.aadharNumber
+    setLoading(true);
+    try {
+      // Navigate to the OTP page
+      router.push("/aadharotp");
+    } finally {
+      setLoading(false);
     }
-    router.push('/aadharotp');
-    // const result = await login(obj);
-    // if (result.status === 200) {
-    //   router.push('/dashboard');
-    //   setToast(true);
-    //   setType('success')
-    //   setMessage('Login successfully!')
-    // } else {
-    //   setToast(true);
-    //   setType('error')
-    //   setMessage(result?.data?.message)
-    // }
-    setLoading(false)
   };
 
   return (
@@ -75,14 +60,23 @@ export default function SignUp() {
             name="aadharNumber"
             render={({ field }) => (
               <FormItem className="w-full">
-                {/* <FormLabel>Aadhaar Number</FormLabel> */}
                 <FormControl>
                   <Input
-                    type="number"
+                    type="text"
+                    inputMode="numeric" // Mobile keyboard shows numbers
+                    pattern="\d{12}" // Ensures only numbers and 12 digits
+                    maxLength={12} // Prevents entering more than 12 digits
                     className="bg-card hover:border hover:border-slate-400 border-slate-300 w-full"
                     placeholder="Enter your Aadhaar Number..."
                     disabled={loading}
+                    autoFocus
                     {...field}
+                    onInput={(e) => {
+                      // Filter out any non-digit characters
+                      e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
+                      // Update the field value accordingly
+                      field.onChange(e.currentTarget.value);
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -93,6 +87,7 @@ export default function SignUp() {
           <Button
             type="submit"
             className="w-full bg-blue-500 text-white hover:bg-blue-600"
+            disabled={loading}
           >
             Proceed
           </Button>
