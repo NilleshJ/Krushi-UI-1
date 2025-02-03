@@ -1,148 +1,98 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { Input } from "@/components/ui/input";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils"; // Utility function for conditional styling
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { useRouter } from "next/navigation";
 
-export default function SignUpPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+const formSchema = z.object({
+  aadharNumber: z
+    .string()
+    .length(12, { message: "Aadhaar number must be exactly 12 digits" })
+    .regex(/^\d+$/, { message: "Only numbers are allowed" }) // Ensures only numbers
+});
+
+type UserFormValue = z.infer<typeof formSchema>;
+
+export default function SignUp() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const defaultValues = { aadharNumber: "" };
+
+  const form = useForm<UserFormValue>({
+    resolver: zodResolver(formSchema),
+    defaultValues
   });
 
-  const [error, setError] = useState<string | null>(null);
-
-  // Handle input changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  // Form submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const { name, email, password, confirmPassword } = formData;
-
-    if (!name || !email || !password || !confirmPassword) {
-      setError("All fields are required.");
-      return;
+  const onSubmit = async (data: UserFormValue) => {
+    setLoading(true);
+    try {
+      // Navigate to the OTP page
+      router.push("/aadharotp");
+    } finally {
+      setLoading(false);
     }
-
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      setError("Invalid email address.");
-      return;
-    }
-
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    setError(null); // Clear errors if validation passes
-    console.log("Sign-up data:", formData);
-
-    // TODO: Implement API request for sign-up
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-100 px-4">
-      <Card className="w-full max-w-sm shadow-lg p-6 bg-white rounded-2xl">
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold">Create an Account</h2>
-          <p className="text-gray-500 text-sm">Sign up to get started</p>
-        </div>
-
-        <CardContent className="mt-4 space-y-4">
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                placeholder="Enter your full name"
-                value={formData.name}
-                onChange={handleChange}
-                className="rounded-xl"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="email">Email Address</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={handleChange}
-                className="rounded-xl"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Enter a strong password"
-                value={formData.password}
-                onChange={handleChange}
-                className="rounded-xl"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                placeholder="Re-enter password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="rounded-xl"
-              />
-            </div>
-
-            <Button
-              type="submit"
-              className={cn(
-                "w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition",
-                !formData.name || !formData.email || !formData.password || !formData.confirmPassword
-                  ? "opacity-50 cursor-not-allowed"
-                  : ""
-              )}
-              disabled={!formData.name || !formData.email || !formData.password || !formData.confirmPassword}
-            >
-              Sign Up
-            </Button>
-          </form>
-
-          <div className="text-center">
-            <p className="text-sm">
-              Already have an account?{" "}
-              <Link href="/signin" className="text-blue-500 hover:underline">
-                Sign In
-              </Link>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    </main>
+    <div className="p-4 flex flex-col mt-40">
+      <div className="text-center text-gray-600">
+        To create a new store, complete your KYC by validating your Aadhaar number
+      </div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col items-center gap-4 mt-16 w-full"
+        >
+          {/* Aadhaar Number Input */}
+          <FormField
+            control={form.control}
+            name="aadharNumber"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <Input
+                    type="text"
+                    inputMode="numeric" // Mobile keyboard shows numbers
+                    pattern="\d{12}" // Ensures only numbers and 12 digits
+                    maxLength={12} // Prevents entering more than 12 digits
+                    className="bg-card hover:border hover:border-slate-400 border-slate-300 w-full"
+                    placeholder="Enter your Aadhaar Number..."
+                    disabled={loading}
+                    autoFocus
+                    {...field}
+                    onInput={(e) => {
+                      // Filter out any non-digit characters
+                      e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
+                      // Update the field value accordingly
+                      field.onChange(e.currentTarget.value);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Proceed Button */}
+          <Button
+            type="submit"
+            className="w-full bg-blue-500 text-white hover:bg-blue-600"
+            disabled={loading}
+          >
+            Proceed
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 }
