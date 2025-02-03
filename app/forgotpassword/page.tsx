@@ -6,10 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
-export default function SignInPage() {
+export default function ForgotPasswordPage() {
   const [formData, setFormData] = useState({
     mobile: "",
-    password: "",
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -30,10 +29,10 @@ export default function SignInPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { mobile, password } = formData;
+    const { mobile } = formData;
 
-    if (!mobile || !password) {
-      setError("All fields are required.");
+    if (!mobile) {
+      setError("Mobile number is required.");
       return;
     }
 
@@ -44,11 +43,11 @@ export default function SignInPage() {
     }
 
     setError(null);
-    console.log("Sign-in data:", formData);
+    console.log("Forgot password data:", formData);
 
-    // Navigate to dashboard or home page after successful sign-in
-    // Change '/dashboard' to the page you want to navigate to after sign-in
-    router.push("/today");
+    // TODO: Implement API request for sending OTP or password reset email
+    // Navigate to the OTP verification page (example path)
+    router.push("/otp-verification"); // Change to your OTP verification page
   };
 
   return (
@@ -56,7 +55,7 @@ export default function SignInPage() {
       <div className="w-full max-w-xs shadow-lg p-6 rounded-2xl">
         <div className="flex flex-col items-center">
           <img src="/accm.png" alt="Logo" className="w-16 h-16 mb-2" />
-          <h2 className="text-2xl font-semibold">Sign In</h2>
+          <h2 className="text-2xl font-semibold">Forgot Password</h2>
         </div>
 
         <div className="mt-4 space-y-4">
@@ -78,40 +77,19 @@ export default function SignInPage() {
               />
             </div>
 
-            <div>
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Enter password"
-                value={formData.password}
-                onChange={handleChange}
-                className="rounded-lg"
-              />
-            </div>
-
             <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              Sign In
+              Send OTP
             </Button>
           </form>
 
-          <div className="text-center mt-2 space-y-2">
+          <div className="text-center mt-2">
             <p className="text-sm">
-              Don't have an account?{" "}
-              <Button
-                onClick={() => router.push("/Enteraadharno")}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-              >
-                Sign Up
-              </Button>
-            </p>
-            <p className="text-sm">
+              Remembered your password?{" "}
               <a
-                onClick={() => router.push("/forgotpassword")}
+                onClick={() => router.push("/signin")}
                 className="text-blue-500 hover:underline cursor-pointer"
               >
-                Forgot Password?
+                Sign In
               </a>
             </p>
           </div>

@@ -1,59 +1,59 @@
 "use client";
 
-import React from "react";
-import { Button } from "@/components/ui/button"; 
-import Image from "next/image";   
+import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
-export default function SignUp() {
+export default function GstVerificationPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [gstDetails, setGstDetails] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  const gstNumber = searchParams.get("gstNumber");
+
+  useEffect(() => {
+    if (gstNumber) {
+      // Simulate fetching GST details
+      setTimeout(() => {
+        setGstDetails({
+          gstNumber,
+          businessName: "XYZ Pvt Ltd",
+          state: "Karnataka",
+          registrationDate: "2022-03-01",
+        });
+        setLoading(false);
+      }, 1000);
+    }
+  }, [gstNumber]);
+
+  const handleProceed = () => {
+    router.push("/congratulationsmsg"); // Navigate to the next step
+  };
+
   return (
-    <div className="flex flex-col items-center h-screen justify-between px-4">
-      {/* Header Section */}
-      <div className="flex items-center justify-between w-full max-w-xs mt-6">
-        <div className="text-3xl w-32 h-9 font-bold mt-10">Sign Up</div>
-        <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-          {/* Placeholder for User Icon */}
-          <Image
-            src="/profile.png" 
-            alt="User Icon"
-            className="w-full h-full rounded-full"
-          />
+    <div className="flex flex-col items-center justify-center min-h-screen px-6">
+      {loading ? (
+        <p>Loading GST details...</p>
+      ) : gstDetails ? (
+        <div className="bg-white shadow-lg p-6 rounded-lg max-w-md text-gray-800">
+          <h2 className="text-xl font-semibold mb-4">GST Details</h2>
+          <p><strong>GST Number:</strong> {gstDetails.gstNumber}</p>
+          <p><strong>Business Name:</strong> {gstDetails.businessName}</p>
+          <p><strong>State:</strong> {gstDetails.state}</p>
+          <p><strong>Registration Date:</strong> {gstDetails.registrationDate}</p>
         </div>
-      </div>
-        {/* Form Section */}
-      <form className="flex flex-col items-center gap-4 mt-16 w-full max-w-xs">
-        
-        {/* Proceed Button */}
-        <Button
-          type="submit"
-          className="w-full mt-96 bg-blue-500 text-white hover:bg-blue-600"
-        >
-          Proceed
-        </Button>
-      </form>
-     
-
-      {/* Footer Navigation */}
-      <div className="flex justify-between w-full max-w-xs mt-auto mb-4">
-        {/* Monitor Icon */}
-        <div className="flex flex-col items-center">
-          <img
-            src="/monitor1.png" 
-            alt="Monitor Icon"
-            className="w-6 h-6"
-          />
-          <div className="text-sm text-gray-500">Monitor</div>
-        </div>
-
-        {/* Sign Up Icon */}
-        <div className="flex flex-col items-center">
-          <img
-            src="/signupp.png" 
-            alt="Sign Up Icon"
-            className="w-6 h-6"
-          />
-          <div className="text-sm text-blue-500">SignUp</div>
-        </div>
-      </div>
+      ) : (
+        <p>No GST details found.</p>
+      )}
+      
+      {/* Proceed Button */}
+      <Button
+        className="mt-6 bg-blue-500 text-white hover:bg-blue-600"
+        onClick={handleProceed}
+      >
+        Proceed
+      </Button>
     </div>
   );
 }
