@@ -3,15 +3,25 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 export default function Login() {
+  const router = useRouter(); // Initialize router
+
+  const handleLogin = (event: React.FormEvent) => {
+    event.preventDefault(); // Prevent page reload
+
+    // Navigate to the next page (update the path as needed)
+    router.push("/storeonwer1sttimelogin/startplan"); 
+  };
+
   return (
     <div
       className="flex items-center justify-center bg-gray-100"
       style={{
-        width: "393px", // Set page width
-        height: "852px", // Set page height
-        margin: "auto", // Center the layout horizontally if needed
+        width: "393px", 
+        height: "852px", 
+        margin: "auto",
       }}
     >
       {/* Card Container */}
@@ -19,7 +29,7 @@ export default function Login() {
         {/* Logo */}
         <div className="flex items-center justify-center mt-4">
           <Image
-            src="/accm.png" // Add your logo path here
+            src="/accm.png"
             alt="Logo"
             width={116}
             height={115}
@@ -30,10 +40,10 @@ export default function Login() {
             }}
           />
         </div>
-        <p>create your password</p>
+        <p>Create your password</p>
 
         {/* Form */}
-        <form className="mt-6 w-full px-6 space-y-4">
+        <form className="mt-6 w-full px-6 space-y-4" onSubmit={handleLogin}>
           {/* Mobile Number */}
           <Input
             type="text"
@@ -43,8 +53,8 @@ export default function Login() {
 
           {/* Password */}
           <Input
-            type=" password"
-            placeholder="Confim Password"
+            type="password"
+            placeholder="Confirm Password"
             className="w-full border border-gray-300 rounded-lg px-3 py-2"
           />
 
@@ -53,8 +63,7 @@ export default function Login() {
             Login
           </Button>
         </form>
-
-             </div>
+      </div>
     </div>
   );
 }

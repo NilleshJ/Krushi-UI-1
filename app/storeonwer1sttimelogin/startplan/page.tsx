@@ -2,8 +2,17 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function SubscriptionPage() {
+  const router = useRouter(); // Initialize router
+
+  const handleLogin = (event: React.FormEvent) => {
+    event.preventDefault(); // Prevent page reload
+
+    // Navigate to the next page (update the path as needed)
+    router.push("/premium"); 
+  };
   return (
     <div className="flex flex-col items-center justify-center bg-white min-h-screen p-4"
     style={{
@@ -59,7 +68,7 @@ export default function SubscriptionPage() {
       </div>
 
       {/* Get Started Button */}
-      <Button className="w-[314px] bg-blue-500 text-white font-medium py-2 rounded-lg mt-6">
+      <Button className="w-[314px] bg-blue-500 text-white font-medium py-2 rounded-lg mt-6" onSubmit={handleLogin}  onClick={() => router.push("/premium")}>
         Get Started
       </Button>
     </div>

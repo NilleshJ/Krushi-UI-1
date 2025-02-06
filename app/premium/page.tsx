@@ -2,23 +2,28 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function SubscriptionPage() {
+  const router = useRouter(); // Initialize router
+
+  const handleLogin = (event: React.FormEvent) => {
+    event.preventDefault(); // Prevent page reload
+    router.push("/storeonwer1sttimelogin/payment"); 
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center bg-white min-h-screen p-4"
-    style={{
+    <div
+      className="flex flex-col items-center justify-center bg-white min-h-screen p-4"
+      style={{
         width: "393px", // Set page width
         height: "852px", // Set page height
         margin: "auto", // Center the layout horizontally if needed
-      }}>
+      }}
+    >
       {/* Logo */}
       <div className="mb-4">
-        <Image
-          src="/accm.png" // Replace with your logo path
-          alt="Logo"
-          width={116}
-          height={115}
-        />
+        <Image src="/accm.png" alt="Logo" width={116} height={115} />
       </div>
 
       {/* Title */}
@@ -37,12 +42,7 @@ export default function SubscriptionPage() {
       >
         {/* Airplane Image */}
         <div className="absolute top-4 left-4">
-          <Image
-            src="/airoplane.png" // Replace with your airplane image path
-            alt="Airplane"
-            width={40}
-            height={40}
-          />
+          <Image src="/airoplane.png" alt="Airplane" width={40} height={40} />
         </div>
 
         {/* Plan Title */}
@@ -59,7 +59,10 @@ export default function SubscriptionPage() {
       </div>
 
       {/* Get Started Button */}
-      <Button className="w-[314px] bg-blue-500 text-white font-medium py-2 rounded-lg mt-6">
+      <Button
+        className="w-[314px] bg-blue-500 text-white font-medium py-2 rounded-lg mt-6"
+        onClick={handleLogin}
+      >
         Get Started
       </Button>
     </div>
