@@ -18,7 +18,7 @@ export default function CustomerOrder() {
     // Handle the "Proceed" button click event
     const handleProceedClick = () => {
         if (isValid && inputValue) {
-            router.push('/order/neworder'); // Navigate to the order confirmation page (adjust the path as needed)
+            router.push('/order/neworder/createorder/searchproduct'); // Navigate to the order confirmation page (adjust the path as needed)
         } else {
             alert('Please enter a valid name or mobile number!');
         }
@@ -60,11 +60,11 @@ export default function CustomerOrder() {
 
             <div className="w-full max-w-md text-center mt-4">
                 <h2 className="text-lg font-medium">Customer</h2>
-                <p className="text-gray-500 mt-1">Select customer type to create an order.</p>
+                <p className="text-gray-500 mt-1">please select a customer type to create an order</p>
                 <p className="text-gray-500 mt-1">Enter your name or mobile number:</p>
 
                 {/* Label above the input box aligned to the left */}
-                <p className="text-left w-full mt-2">Name or Mobile Number:</p>
+                <p className="text-left w-full mt-2">Select Customer</p>
 
                 {/* Input TextBox */}
                 <input
