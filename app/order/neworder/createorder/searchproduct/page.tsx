@@ -34,7 +34,7 @@ export default function CustomerOrder() {
       setTempData([...tempData, { productName, searchKey }]);
       setProductName('');
       setSearchKey('');
-      router.push('/proceed-page'); // Navigate to another page
+      router.push('/order/neworder/createorder/searchorder/selectproduct'); // Navigate to another page
     } else {
       alert('Invalid Product Name or Search Key');
     }
@@ -46,7 +46,7 @@ export default function CustomerOrder() {
       <div className="bg-green-100 p-6 rounded-lg w-full max-w-md relative">
         <ArrowLeft 
           className="absolute top-4 left-4 cursor-pointer text-blue-500" 
-          onClick={() => router.push('/previous-page')} // Navigate to desired page
+          onClick={() => router.push('/order/neworder/createorder')} // Navigate to desired page
         />
         <h1 className="text-xl font-bold text-center">Customer Order</h1>
         <p className="mt-2 font-medium text-center">Rajendra Shedge</p>
