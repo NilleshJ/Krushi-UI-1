@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import BottomNavbar from "..//Bottomnavbar"; // Adjusted import for BottomNavbar
+import BottomNavbar from "../Bottomnavbar"; // Adjusted import for BottomNavbar
 
 const PaymentTracking = () => {
   const [screen, setScreen] = useState("search");

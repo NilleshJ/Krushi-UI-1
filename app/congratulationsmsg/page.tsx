@@ -10,7 +10,7 @@ export default function SignUp() {
 
   const handleProceed = () => {
     // Navigate to the next page
-    router.push("/signin"); // Replace "/next-page" with your actual route
+    router.push("/storeonwer1sttimelogin/signupp"); // Replace "/next-page" with your actual route
   };
 
   return (

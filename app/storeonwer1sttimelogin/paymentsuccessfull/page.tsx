@@ -10,7 +10,7 @@ const PaymentSuccess = () => {
   useEffect(() => {
     // Redirect to home page after 5 seconds
     const timer = setTimeout(() => {
-      router.push("/");
+      router.push("/Today");
     }, 5000);
 
     return () => clearTimeout(timer); // Cleanup function to clear timeout if the component unmounts
