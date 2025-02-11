@@ -56,7 +56,7 @@ export default function CustomerOrder() {
         <Card
           key={product.id}
           className="w-full max-w-sm p-4 my-3 cursor-pointer bg-white shadow-lg rounded-lg"
-          onClick={() => router.push(`/order/${product.id}`)}
+          onClick={() => router.push(`/order/quantitydiscount`)}
         >
           <p className="font-bold">{product.name}</p>
           <p className="text-sm text-gray-600">{product.company}</p>
