@@ -13,6 +13,7 @@ export default function NewCustomer() {
   const router = useRouter();
 
   const handleProceed = () => {
+    console.log("Proceed Clicked with Type:", customerType); // Debugging
     if (customerType === "retailer") {
       router.push("/New_customer(retail)");
     } else if (customerType === "business") {
@@ -34,7 +35,12 @@ export default function NewCustomer() {
       <Card className="w-full max-w-md p-4">
         <CardContent className="space-y-4">
           <label className="text-gray-700 font-medium">Customer Type</label>
-          <Select onValueChange={setCustomerType}>
+          <Select
+            onValueChange={(value) => {
+              console.log("Selected Customer Type:", value); // Debugging
+              setCustomerType(value);
+            }}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select Customer Type" />
             </SelectTrigger>
@@ -50,7 +56,9 @@ export default function NewCustomer() {
           </Button>
         </CardContent>
       </Card>
-      <BottomNavbar activeTab = {" "}/>
+
+      {/* Bottom Navbar */}
+      <BottomNavbar activeTab="" />
     </div>
   );
 }
