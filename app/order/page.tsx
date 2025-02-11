@@ -1,170 +1,89 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ClipboardList } from "lucide-react";
+import { useState, useEffect } from "react";
 import BottomNavbar from "../Bottomnavbar";
+import { useRouter } from "next/navigation"; // Import useRouter for navigation
 
-// Define the Order interface for strong typing
+// Define the Order type
 interface Order {
-  productName: string;
-  companyName: string;
-  stockInHand: number;
-  purchasePrice: number;
-  daysToExpiry: number;
-  sellingPrice: number;
-  expiryDate: string;
-  taxRate: number;
-  batchName: string;
-  taxAmount: number;
-  mrp: number;
-  totalAmount: number;
-  quantity: string;
-  discount: string;
-  total?: string;
+  name: string;
+  orderDate: string;
+  products: number;
+  amount: string;
 }
 
-// Initial order data with default values
-const initialProductData: Order = {
-  productName: "",
-  companyName: "",
-  stockInHand: 78,
-  purchasePrice: 1000,
-  daysToExpiry: 12,
-  sellingPrice: 12000,
-  expiryDate: "12-Dec-2024",
-  taxRate: 12000,
-  batchName: "BAT 1234",
-  taxAmount: 12000,
-  mrp: 1000,
-  totalAmount: 12000,
-  quantity: "",
-  discount: "",
-};
-
-const OrderForm: React.FC = () => {
+export default function OrdersPage() {
+  const [orders, setOrders] = useState<Order[]>([]);
   const router = useRouter(); // Initialize router
 
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [currentOrder, setCurrentOrder] = useState<Order>({ ...initialProductData });
+  useEffect(() => {
+    // Simulating fetching data from a database
+    const fetchedOrders: Order[] = [
+      {
+        name: "Rajendra Shedge",
+        orderDate: "12-Dec-2024",
+        products: 12,
+        amount: "₹ 12000",
+      },
+      {
+        name: "Rajendra Shedge",
+        orderDate: "12-Dec-2024",
+        products: 12,
+        amount: "₹ 12000",
+      },
+      {
+        name: "Rajendra Shedge",
+        orderDate: "12-Dec-2024",
+        products: 12,
+        amount: "₹ 12000",
+      },
+      {
+        name: "Rajendra Shedge",
+        orderDate: "12-Dec-2024",
+        products: 12,
+        amount: "₹ 12000",
+      },
+    ];
+    setOrders(fetchedOrders);
+  }, []);
 
-  // Handle input changes with proper typing
-  const handleInputChange = (field: keyof Order, value: string | number) => {
-    setCurrentOrder((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  // Calculate total amount based on quantity and discount
-  const calculateTotal = (): string => {
-    const quantity = parseFloat(currentOrder.quantity) || 0;
-    const discount = parseFloat(currentOrder.discount) || 0;
-    const price = currentOrder.sellingPrice;
-    const total = (quantity * price) * (1 - discount / 100);
-    return total.toFixed(2);
-  };
-
-  // Add current order to orders list and reset the form
-  const handleAddOrder = () => {
-    if (currentOrder.quantity && currentOrder.productName) {
-      setOrders((prev) => [...prev, { ...currentOrder, total: calculateTotal() }]);
-      setCurrentOrder({ ...initialProductData });
-    }
+  // Handle New Order Button click event
+  const handleNewOrderClick = () => {
+    // Redirect to the "new-order" page (adjust the path as needed)
+    router.push("/order/neworder"); // Change to your desired path
   };
 
   return (
-    <div className="max-w-md mx-auto bg-[#F2F7F2] min-h-screen">
-      {/* Header Section */}
-      <div className="bg-[#E6F3F3] p-4">
-        <h2 className="text-lg font-medium">Customer Order</h2>
-        <div className="text-sm">Rajendra Shedge</div>
-      </div>
-
-      {/* Main Content */}
-      <div className="p-4 space-y-4">
-        {/* Product Selection */}
-        <div className="bg-white rounded-lg p-4 shadow-sm">
-          <div className="space-y-3">
-            <div
-              className="flex justify-between items-center border-b pb-2 cursor-pointer"
-              onClick={() => router.push("/products")}
-            >
-              <span className="text-gray-600">Product Name</span>
-              <div className="w-6 h-6 border rounded flex items-center justify-center">⌄</div>
-            </div>
-            <div
-              className="flex justify-between items-center border-b pb-2 cursor-pointer"
-              onClick={() => router.push("/companies")}
-            >
-              <span className="text-gray-600">Company Name</span>
-              <div className="w-6 h-6 border rounded flex items-center justify-center">⌄</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Details Section */}
-        <div className="bg-white rounded-lg p-4 shadow-sm space-y-3">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label className="text-gray-600">Stock in Hand</Label>
-              <div className="font-medium">{currentOrder.stockInHand}</div>
-            </div>
-            <div>
-              <Label className="text-gray-600">Purchase Price</Label>
-              <div className="font-medium">{currentOrder.purchasePrice}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Quantity and Discount Section */}
-        <div className="bg-white rounded-lg p-4 shadow-sm space-y-3">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label className="text-gray-600">Quantity</Label>
-              <Input
-                type="number"
-                placeholder="Quantity"
-                className="mt-1"
-                value={currentOrder.quantity}
-                onChange={(e) => handleInputChange("quantity", e.target.value)}
-              />
-            </div>
-            <div>
-              <Label className="text-gray-600">Discount %</Label>
-              <Input
-                type="number"
-                placeholder="Discount %"
-                className="mt-1"
-                value={currentOrder.discount}
-                onChange={(e) => handleInputChange("discount", e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center pt-2">
-            <span className="text-gray-600">Total Amount</span>
-            <span>{calculateTotal()}</span>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="space-y-3 pt-2">
-          <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={handleAddOrder}>
-            Confirm and Add another Product
-          </Button>
-          <Button className="w-full bg-orange-500 hover:bg-orange-600" onClick={() => router.push("/final-list")}>
-            Go to Final List
-          </Button>
-        </div>
-      </div>
-
-      {/* Bottom Navigation */}
-      <BottomNavbar activeTab={""} />
+    <div className="max-w-md mx-auto p-4 bg-white">
+      <h1 className="text-2xl font-bold">Orders</h1>
+      <Button
+        className="w-full mt-4 flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white"
+        onClick={handleNewOrderClick} // Add onClick handler to navigate
+      >
+        <ClipboardList size={20} /> New Order
+      </Button>
+      <h2 className="text-lg font-semibold mt-6">Pending Orders</h2>
+      <ScrollArea className="mt-4 space-y-3">
+        {orders.map((order, index) => (
+          <Card key={index} className="bg-red-200">
+            <CardContent className="p-4">
+              <div className="flex justify-between font-semibold">
+                <span>{order.name}</span>
+                <span className="text-sm">Order Date {order.orderDate}</span>
+              </div>
+              <div className="flex justify-between text-sm mt-2">
+                <span>Products {order.products}</span>
+                <span>Invoice Amount <strong>{order.amount}</strong></span>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </ScrollArea>
+      <BottomNavbar activeTab={""}></BottomNavbar>
     </div>
   );
-};
-
-export default OrderForm;
+}
