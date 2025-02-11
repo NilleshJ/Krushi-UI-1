@@ -62,10 +62,10 @@ const PaymentPage = () => {
         </div>
 
         {/* Payment Options */}
-        <Button className="w-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center gap-2 mb-2" onClick={() => router.push('/full-payment')}>
+        <Button className="w-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center gap-2 mb-2" onClick={() => router.push('/order/fullpayment')}>
           <CheckCircle size={20} /> Full Payment
         </Button>
-        <Button className="w-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center gap-2" onClick={() => router.push('/credit')}>
+        <Button className="w-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center gap-2" onClick={() => router.push('/order/credit')}>
           <DollarSign size={20} /> Credit
         </Button>
       </div>
