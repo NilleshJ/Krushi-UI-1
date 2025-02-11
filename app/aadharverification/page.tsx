@@ -2,8 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
 
-export default function AadharVerification() {
+// Disable SSR to avoid the prerendering issue
+const AadharVerification = dynamic(() => Promise.resolve(AadharVerificationComponent), { ssr: false });
+
+function AadharVerificationComponent() {
   const [userDetails, setUserDetails] = useState<any>(null);
   const searchParams = useSearchParams();
   const aadharNumber = searchParams.get("aadharNumber");
@@ -23,7 +27,6 @@ export default function AadharVerification() {
     }
   }, [aadharNumber]);
 
-  // Temporary proceed button to move to the next page
   return (
     <div className="flex flex-col min-h-screen px-4 bg-gray-50 pt-6 pb-20 md:px-6 md:pt-8 lg:px-8 lg:pt-10">
       <div className="flex-grow flex flex-col items-center justify-center mb-8">
@@ -50,7 +53,6 @@ export default function AadharVerification() {
             </button>
           </div>
         ) : (
-          // Once data is fetched or mocked, display it
           <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-6 mb-6">
             <p className="text-lg text-gray-700 mb-2">
               <strong>Name:</strong> {userDetails.name}
@@ -79,3 +81,5 @@ export default function AadharVerification() {
     </div>
   );
 }
+
+export default AadharVerification;
