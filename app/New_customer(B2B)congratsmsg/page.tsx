@@ -13,10 +13,10 @@ export default function NewCustomerPage() {
       <div className="w-full max-w-md">
         <button
           className="flex items-center text-blue-600"
-          onClick={() => router.push("/New_customer(retail)verification")} // Temporary route
+          onClick={() => router.push("/New_customer(B2B)gstverification")} // Temporary route
         >
           <ArrowLeft className="w-5 h-5" />
-          <span className="ml-2 font-medium">New Customer (Retail)</span>
+          <span className="ml-2 font-medium">New Customer (Business)</span>
         </button>
       </div>
 
@@ -29,7 +29,7 @@ export default function NewCustomerPage() {
         />
         <h2 className="text-lg font-semibold">Congratulations!</h2>
         <p className="text-gray-600">
-          The customer’s account has been successfully created
+        The customer's account has been successfully created.
         </p>
       </div>
 
