@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-export default function GstVerificationPage() {
+function GstVerificationComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [gstDetails, setGstDetails] = useState<any>(null);
@@ -46,7 +46,7 @@ export default function GstVerificationPage() {
       ) : (
         <p>No GST details found.</p>
       )}
-      
+
       {/* Proceed Button */}
       <Button
         className="mt-6 bg-blue-500 text-white hover:bg-blue-600"
@@ -55,5 +55,13 @@ export default function GstVerificationPage() {
         Proceed
       </Button>
     </div>
+  );
+}
+
+export default function GstVerificationPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-lg">Loading...</div>}>
+      <GstVerificationComponent />
+    </Suspense>
   );
 }
