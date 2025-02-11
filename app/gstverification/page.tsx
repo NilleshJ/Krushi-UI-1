@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-export default function GstVerificationPage() {
+function GstVerificationPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [gstDetails, setGstDetails] = useState<any>(null);
@@ -14,7 +14,6 @@ export default function GstVerificationPage() {
 
   useEffect(() => {
     if (gstNumber) {
-      // Simulate fetching GST details
       setTimeout(() => {
         setGstDetails({
           gstNumber,
@@ -28,7 +27,7 @@ export default function GstVerificationPage() {
   }, [gstNumber]);
 
   const handleProceed = () => {
-    router.push("/congratulationsmsg"); // Navigate to the next step
+    router.push("/congratulationsmsg");
   };
 
   return (
@@ -46,14 +45,18 @@ export default function GstVerificationPage() {
       ) : (
         <p>No GST details found.</p>
       )}
-      
-      {/* Proceed Button */}
-      <Button
-        className="mt-6 bg-blue-500 text-white hover:bg-blue-600"
-        onClick={handleProceed}
-      >
+
+      <Button className="mt-6 bg-blue-500 text-white hover:bg-blue-600" onClick={handleProceed}>
         Proceed
       </Button>
     </div>
+  );
+}
+
+export default function GstVerificationPage() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <GstVerificationPageContent />
+    </Suspense>
   );
 }
